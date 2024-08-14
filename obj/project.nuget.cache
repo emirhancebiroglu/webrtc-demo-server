@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "KqsG5oKioVA=",
+  "dgSpecHash": "RMK1w64T3ME=",
   "success": true,
-  "projectFilePath": "D:\\Desktop\\WebRTCWebSocketServer\\WebRTCWebSocketServer.csproj",
+  "projectFilePath": "C:\\Users\\Emirhan\\Documents\\GitHub\\webrtc-demo-server\\WebRTCWebSocketServer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Emirhan\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Emirhan\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

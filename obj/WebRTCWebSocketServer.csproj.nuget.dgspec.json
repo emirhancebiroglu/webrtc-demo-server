@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Desktop\\WebRTCWebSocketServer\\WebRTCWebSocketServer.csproj": {}
+    "C:\\Users\\Emirhan\\Documents\\GitHub\\webrtc-demo-server\\WebRTCWebSocketServer.csproj": {}
   },
   "projects": {
-    "D:\\Desktop\\WebRTCWebSocketServer\\WebRTCWebSocketServer.csproj": {
+    "C:\\Users\\Emirhan\\Documents\\GitHub\\webrtc-demo-server\\WebRTCWebSocketServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Desktop\\WebRTCWebSocketServer\\WebRTCWebSocketServer.csproj",
+        "projectUniqueName": "C:\\Users\\Emirhan\\Documents\\GitHub\\webrtc-demo-server\\WebRTCWebSocketServer.csproj",
         "projectName": "WebRTCWebSocketServer",
-        "projectPath": "D:\\Desktop\\WebRTCWebSocketServer\\WebRTCWebSocketServer.csproj",
+        "projectPath": "C:\\Users\\Emirhan\\Documents\\GitHub\\webrtc-demo-server\\WebRTCWebSocketServer.csproj",
         "packagesPath": "C:\\Users\\Emirhan\\.nuget\\packages\\",
-        "outputPath": "D:\\Desktop\\WebRTCWebSocketServer\\obj\\",
+        "outputPath": "C:\\Users\\Emirhan\\Documents\\GitHub\\webrtc-demo-server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Emirhan\\AppData\\Roaming\\NuGet\\NuGet.Config",
