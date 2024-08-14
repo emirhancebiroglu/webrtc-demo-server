@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "XYbZ0V7+xsZN7ZYDDwMc+xNONo3yId2/BbuGzs9Vuls=",
+  "Source": "WebRTCWebSocketServer",
+  "BasePath": "_content/WebRTCWebSocketServer",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
