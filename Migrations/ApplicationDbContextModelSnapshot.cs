@@ -22,7 +22,20 @@ namespace WebRTCWebSocketServer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("WebRTCWebSocketServer.Models.VideoFrame", b =>
+            modelBuilder.Entity("WebRTCWebSocketServer.Models.CallRecording", b =>
+                {
+                    b.Property<string>("CallId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CallId");
+
+                    b.ToTable("CallRecordings");
+                });
+
+            modelBuilder.Entity("WebRTCWebSocketServer.Models.RecordingFile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,16 +43,39 @@ namespace WebRTCWebSocketServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<byte[]>("Data")
+                    b.Property<string>("CallId")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("VideoFrames");
+                    b.HasIndex("CallId");
+
+                    b.ToTable("RecordingFiles");
+                });
+
+            modelBuilder.Entity("WebRTCWebSocketServer.Models.RecordingFile", b =>
+                {
+                    b.HasOne("WebRTCWebSocketServer.Models.CallRecording", "CallRecording")
+                        .WithMany("RecordingFiles")
+                        .HasForeignKey("CallId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CallRecording");
+                });
+
+            modelBuilder.Entity("WebRTCWebSocketServer.Models.CallRecording", b =>
+                {
+                    b.Navigation("RecordingFiles");
                 });
 #pragma warning restore 612, 618
         }
