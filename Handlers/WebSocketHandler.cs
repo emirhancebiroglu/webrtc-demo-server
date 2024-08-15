@@ -161,6 +161,8 @@ namespace WebRTCWebSocketServer.Handlers
                     {
                         var callId = idToken.ToString();
                         SaveRecordingFile(videoData, messageType, callId);
+
+                        _ = SendDataToPythonServerAsync(base64Data, "video", callId);
                     }
                 }
                 else
@@ -187,6 +189,8 @@ namespace WebRTCWebSocketServer.Handlers
                     {
                         var callId = idToken.ToString();
                         SaveRecordingFile(audioData, messageType, callId);
+
+                        _ = SendDataToPythonServerAsync(base64Data, "audio", callId);
                     }
                 }
                 else
@@ -246,7 +250,7 @@ namespace WebRTCWebSocketServer.Handlers
 
                 foreach (var filePath in videoFiles.Concat(audioFiles))
                 {
-                    System.Console.WriteLine("Processing file: " + filePath);
+                    Console.WriteLine("Processing file: " + filePath);
                     string fileType = filePath.Contains("Video") ? "Video" : "Audio";
                     
                     var recordingFile = new RecordingFile
@@ -256,7 +260,7 @@ namespace WebRTCWebSocketServer.Handlers
                         CallId = callRecording.CallId
                     };
 
-                    System.Console.WriteLine("Recording file: " + recordingFile);
+                    Console.WriteLine("Recording file: " + recordingFile);
 
                     _context.RecordingFiles.Add(recordingFile);
                 }
@@ -278,6 +282,30 @@ namespace WebRTCWebSocketServer.Handlers
                         await socket.SendAsync(new ArraySegment<byte>(encodedMessage, 0, encodedMessage.Length), WebSocketMessageType.Text, true, CancellationToken.None);
                     }
                 }
+            }
+        }
+
+        private static async Task SendDataToPythonServerAsync(string base64Data, string dataType, string cid){
+            using var httpClient = new HttpClient();
+            
+            var jsonData = new
+            {
+                fileType = dataType,
+                callId = cid,
+                fileData = base64Data
+            };
+
+            var jsonContent = new StringContent(JsonConvert.SerializeObject(jsonData), Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PostAsync("http://192.168.1.25:5000/api/receive-data", jsonContent);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"{dataType} data sent to python server successfully");
+            }
+            else
+            {
+                Console.WriteLine($"Failed to send {dataType} data to Python server: {response.StatusCode}");
             }
         }
     }

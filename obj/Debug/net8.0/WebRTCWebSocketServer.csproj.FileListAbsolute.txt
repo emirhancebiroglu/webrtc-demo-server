@@ -275,3 +275,15 @@ C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\obj\Debug\net8.0\scopedcss\
 C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\obj\Debug\net8.0\WebRTCWe.CF8E8C8F.Up2Date
 C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\obj\Debug\net8.0\WebRTCWebSocketServer.genruntimeconfig.cache
 C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\obj\Debug\net8.0\ref\WebRTCWebSocketServer.dll
+C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\bin\Debug\net8.0\Microsoft.AspNetCore.Connections.Abstractions.dll
+C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\bin\Debug\net8.0\Microsoft.AspNetCore.Http.Connections.Client.dll
+C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\bin\Debug\net8.0\Microsoft.AspNetCore.Http.Connections.Common.dll
+C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Client.dll
+C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Client.Core.dll
+C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Common.dll
+C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Protocols.Json.dll
+C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\bin\Debug\net8.0\Microsoft.Extensions.Features.dll
+C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+C:\Users\Emirhan\Documents\GitHub\webrtc-demo-server\bin\Debug\net8.0\System.Net.WebSockets.WebSocketProtocol.dll
