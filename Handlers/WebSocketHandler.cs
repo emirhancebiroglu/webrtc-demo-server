@@ -12,7 +12,6 @@ namespace WebRTCWebSocketServer.Handlers
     {
         private static readonly List<WebSocket> _sockets = [];
         private readonly ApplicationDbContext _context = context;
-        private string? CallId = null;
 
         public async Task HandleWebSocketConnection(WebSocket webSocket)
         {
@@ -42,18 +41,9 @@ namespace WebRTCWebSocketServer.Handlers
                             {
                                 string messageType = typeToken.ToString();
 
-                                if (CallId == null)
-                                {
-                                    CallId = jsonMessage.TryGetValue("id", out JToken? idToken) ? idToken.ToString() : null;
-                                }
-                                else
-                                {
-                                    System.Console.WriteLine("CallId: " + CallId);
-                                }
-
                                 HandleVideoData(jsonMessage, messageType);
                                 HandleAudioData(jsonMessage, messageType);
-                                await HandleHangupAsync(messageType, message, webSocket);
+                                await HandleHangupAsync(messageType, message, webSocket, jsonMessage);
                                 HandleCallId(messageType, message, webSocket);
                                 
                             }
@@ -97,7 +87,7 @@ namespace WebRTCWebSocketServer.Handlers
             return callRecording;
         }
 
-        private void SaveRecordingFile(byte[] data, string fileType)
+        private static void SaveRecordingFile(byte[] data, string fileType, string callId)
         {
             string rootDirectory = Directory.GetCurrentDirectory();
             string directory = fileType.Contains("Video") ? "Video" : "Audio";
@@ -108,7 +98,7 @@ namespace WebRTCWebSocketServer.Handlers
                 Directory.CreateDirectory(fileDirectory);
             }
 
-            string filePath = Path.Combine(fileDirectory, $"{CallId}-{fileType}.webm");
+            string filePath = Path.Combine(fileDirectory, $"{callId}-{fileType}.webm");
 
             try
             {
@@ -141,7 +131,7 @@ namespace WebRTCWebSocketServer.Handlers
             }
         }
 
-        private void HandleVideoData(JObject jsonMessage, string messageType)
+        private static void HandleVideoData(JObject jsonMessage, string messageType)
         {
             if (jsonMessage.TryGetValue("data", out JToken? dataToken))
             {
@@ -150,7 +140,11 @@ namespace WebRTCWebSocketServer.Handlers
 
                 if (messageType == "callerVideo" || messageType == "calleeVideo")
                 {
-                    SaveRecordingFile(videoData, messageType);
+                    if (jsonMessage.TryGetValue("id", out JToken? idToken))
+                    {
+                        var callId = idToken.ToString();
+                        SaveRecordingFile(videoData, messageType, callId);
+                    }
                 }
                 else
                 {
@@ -163,7 +157,7 @@ namespace WebRTCWebSocketServer.Handlers
             }
         }
 
-        private void HandleAudioData(JObject jsonMessage, string messageType)
+        private static void HandleAudioData(JObject jsonMessage, string messageType)
         {
             if (jsonMessage.TryGetValue("data", out JToken? dataToken))
             {
@@ -172,7 +166,11 @@ namespace WebRTCWebSocketServer.Handlers
 
                 if (messageType == "callerAudio" || messageType == "calleeAudio")
                 {
-                    SaveRecordingFile(audioData, messageType);
+                    if (jsonMessage.TryGetValue("id", out JToken? idToken))
+                    {
+                        var callId = idToken.ToString();
+                        SaveRecordingFile(audioData, messageType, callId);
+                    }
                 }
                 else
                 {
@@ -185,7 +183,7 @@ namespace WebRTCWebSocketServer.Handlers
             }
         }
 
-        private async Task HandleHangupAsync(string messageType, string message, WebSocket webSocket)
+        private async Task HandleHangupAsync(string messageType, string message, WebSocket webSocket, JObject jsonMessage)
         {
             if (messageType == "hangup")
             {
@@ -198,35 +196,28 @@ namespace WebRTCWebSocketServer.Handlers
                     }
                 }
 
-                System.Console.WriteLine("call id: " + CallId);
-
-                if (CallId != null)
-                {
-                    await SaveAllRecordingFilesAsync();
-                    CallId = null;
-                }
-                else
-                {
-                    Console.WriteLine("No call ID found in the hangup message.");
-                }
+                if(jsonMessage.TryGetValue("callId", out JToken? callIdToken)){
+                    var callId = callIdToken.ToString();
+                    await SaveAllRecordingFilesAsync(callId);
+                } 
             }
         }
 
-        private async Task SaveAllRecordingFilesAsync()
+        private async Task SaveAllRecordingFilesAsync(string callId)
         {
-            if (CallId != null)
+            if (callId != null)
             {
-                var callRecording = await GetOrCreateCallRecordingAsync(CallId);
+                var callRecording = await GetOrCreateCallRecordingAsync(callId);
 
                 string rootDirectory = Directory.GetCurrentDirectory();
                 string audioDirectory = Path.Combine(rootDirectory, "Audio");
                 string videoDirectory = Path.Combine(rootDirectory, "Video");
 
-                var videoFiles = Directory.GetFiles(videoDirectory, $"{CallId}-callerVideo.webm")
-                    .Concat(Directory.GetFiles(videoDirectory, $"{CallId}-calleeVideo.webm"))
+                var videoFiles = Directory.GetFiles(videoDirectory, $"{callId}-callerVideo.webm")
+                    .Concat(Directory.GetFiles(videoDirectory, $"{callId}-calleeVideo.webm"))
                     .ToList();
-                var audioFiles = Directory.GetFiles(audioDirectory, $"{CallId}-callerAudio.webm")
-                    .Concat(Directory.GetFiles(audioDirectory, $"{CallId}-calleeAudio.webm"))
+                var audioFiles = Directory.GetFiles(audioDirectory, $"{callId}-callerAudio.webm")
+                    .Concat(Directory.GetFiles(audioDirectory, $"{callId}-calleeAudio.webm"))
                     .ToList();
 
                 // Check if there are any files to process
