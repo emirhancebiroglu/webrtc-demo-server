@@ -4,7 +4,6 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using WebRTCWebSocketServer.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Dynamic;
 
 namespace WebRTCWebSocketServer.Handlers
 {
@@ -19,53 +18,71 @@ namespace WebRTCWebSocketServer.Handlers
 
             var buffer = new byte[1024 * 4];
             var messageBuilder = new StringBuilder();
+            WebSocketReceiveResult? result = null;
 
-            WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-
-            while (!result.CloseStatus.HasValue)
+            try
             {
-                if(result.MessageType == WebSocketMessageType.Text){
-                    var messagePart = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                    messageBuilder.Append(messagePart);
-
-                    if (result.EndOfMessage)
-                    {
-                        try
-                        {
-                            var message = messageBuilder.ToString();
-                            var jsonMessage = JObject.Parse(message);
-
-                            SendSDPAndCandidatesToClient(jsonMessage, message, result, webSocket);
-
-                            if (jsonMessage.TryGetValue("type", out JToken? typeToken))
-                            {
-                                string messageType = typeToken.ToString();
-
-                                HandleVideoData(jsonMessage, messageType);
-                                HandleAudioData(jsonMessage, messageType);
-                                await HandleHangupAsync(messageType, message, webSocket, jsonMessage);
-                                HandleCallId(messageType, message, webSocket);
-                                
-                            }
-                            else
-                            {
-                                Console.WriteLine("No message type found.");
-                            }
-                        }
-                        catch (JsonReaderException)
-                        {
-                            Console.WriteLine("Received malformed JSON message.");
-                        }
-
-                        messageBuilder.Clear();
-                    }
-                }
-
                 result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            }
 
-            _sockets.Remove(webSocket);
-            await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+                while (!result.CloseStatus.HasValue)
+                {
+                    if(result.MessageType == WebSocketMessageType.Text){
+                        var messagePart = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                        messageBuilder.Append(messagePart);
+
+                        if (result.EndOfMessage)
+                        {
+                            try
+                            {
+                                var message = messageBuilder.ToString();
+                                var jsonMessage = JObject.Parse(message);
+
+                                SendSDPAndCandidatesToClient(jsonMessage, message, result, webSocket);
+
+                                if (jsonMessage.TryGetValue("type", out JToken? typeToken))
+                                {
+                                    string messageType = typeToken.ToString();
+
+                                    HandleVideoData(jsonMessage, messageType);
+                                    HandleAudioData(jsonMessage, messageType);
+                                    await HandleHangupAsync(messageType, message, webSocket, jsonMessage);
+                                    HandleCallId(messageType, message, webSocket);
+                                    
+                                }
+                                else
+                                {
+                                    Console.WriteLine("No message type found.");
+                                }
+                            }
+                            catch (JsonReaderException)
+                            {
+                                Console.WriteLine("Received malformed JSON message.");
+                            }
+
+                            messageBuilder.Clear();
+                        }
+                    }
+
+                    result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                }
+            }
+            catch (WebSocketException ex)
+            {
+                Console.WriteLine($"WebSocketException: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+            finally
+            {
+                _sockets.Remove(webSocket);
+                if (result != null &&  result.CloseStatus != null && webSocket.State == WebSocketState.Open)
+                {
+                    await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+                }
+                Console.WriteLine("WebSocket connection closed.");
+            }
         }
 
         private async Task<CallRecording> GetOrCreateCallRecordingAsync(string callId)
