@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WebRTCWebSocketServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b71d03d092ad6e068a7efccf1a94e1fa42e3c864")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0acfa5f0f767321b27df885e935ae596e08f5513")]
 [assembly: System.Reflection.AssemblyProductAttribute("WebRTCWebSocketServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WebRTCWebSocketServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

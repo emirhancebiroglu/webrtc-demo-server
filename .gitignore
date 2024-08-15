@@ -1,0 +1,72 @@
+# Ignore build output
+bin/
+obj/
+
+# Ignore video files
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.flv
+*.webm
+*.wmv
+
+# Ignore audio files
+*.mp3
+*.wav
+*.flac
+*.aac
+*.ogg
+*.wma
+*.m4a
+*.opus
+
+# Ignore temporary files
+*.tmp
+*.temp
+*.log
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore OS-generated files
+.DS_Store
+Thumbs.db
+
+# Ignore Rider and VSCode specific files
+.idea/
+.vscode/
+*.code-workspace
+
+# Ignore JetBrains Rider files
+.idea/
+.idea_modules/
+
+# Ignore NuGet packages
+packages/
+*.nupkg
+*.snupkg
+
+# Ignore publish output
+publish/
+*.PublishProfiles/
+
+# Ignore .NET user secrets
+secrets.json
+
+# Ignore database files (if applicable)
+*.mdf
+*.ldf
+*.sqlite
+*.db
+
+# Ignore environment variable files
+.env
+.env.*
+
+# Ignore generated files
+gen/
+gen/**
