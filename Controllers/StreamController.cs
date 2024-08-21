@@ -7,5 +7,11 @@ namespace WebRTCWebSocketServer.Controllers
     public class StreamController(ILogger<StreamController> logger) : ControllerBase
     {
         private readonly ILogger<StreamController> _logger = logger;
+
+        [HttpGet("test")]
+        public IActionResult Test()
+        {
+            return Ok("Stream controller test");
+        }
     }
 }

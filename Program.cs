@@ -22,6 +22,8 @@ builder.WebHost.ConfigureKestrel(options =>
     {
         listenOptions.UseHttps(new X509Certificate2("certificates/localhost.pfx", "2165"));
     });
+
+    options.ListenAnyIP(5216);
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => {
@@ -63,4 +65,5 @@ app.Use(async (context, next) =>
 
 app.MapControllers();
 app.Urls.Add("https://0.0.0.0:5217");
+app.Urls.Add("http://0.0.0.0:5216");
 app.Run();
